@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopSphere | Customers</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        :root {
+            --green: #18b89a;
+            --light: #f6f8f8;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: var(--light);
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background: white;
+            padding: 25px 15px;
+            border-right: 1px solid #eee;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 40px;
+        }
+
+        .logo span { color: var(--green); }
+
+        .sidebar a {
+            display: block;
+            padding: 13px 15px;
+            margin-bottom: 7px;
+            text-decoration: none;
+            color: #555;
+            border-radius: 10px;
+        }
+
+        .sidebar a i { width: 25px; }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: rgba(24,184,154,.12);
+            color: var(--green);
+        }
+
+        .main {
+            margin-left: 250px;
+            padding: 30px;
+        }
+
+        .box, .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 3px 15px rgba(0,0,0,.03);
+        }
+
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            height: 100%;
+        }
+
+        .stat-icon, .customer-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            background: #dff7f1;
+            color: var(--green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-number {
+            font-size: 23px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .search-box {
+            max-width: 350px;
+        }
+
+        .search-box input {
+            border-radius: 10px;
+            padding: 11px 15px;
+        }
+
+        .table th {
+            color: #777;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .table td { white-space: nowrap; }
+
+        .customer-name { font-weight: 600; }
+
+        .view-btn {
+            background: #e5f8f3;
+            color: var(--green);
+            border: none;
+            padding: 7px 13px;
+            border-radius: 8px;
+        }
+
+        .view-btn:hover {
+            background: var(--green);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 45px 15px;
+            color: #888;
+        }
+
+        .empty-state i {
+            font-size: 45px;
+            color: #b8e9dc;
+            margin-bottom: 15px;
+        }
+
+        .detail-card {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 12px;
+            }
+
+            .logo {
+                margin-bottom: 12px;
+            }
+
+            .sidebar a {
+                display: inline-block;
+                padding: 9px;
+                font-size: 12px;
+                margin: 2px;
+            }
+
+            .sidebar a i {
+                width: auto;
+                margin-right: 4px;
+            }
+
+            .sidebar hr { display: none; }
+
+            .main {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .box { padding: 15px; }
+        }
+    </style>
+</head>
+
+<body>
+
+
+<div class="sidebar">
+    <div class="logo">Shop<span>Sphere</span></div>
+
+    <a href="dashboard.html">
+        <i class="fa-solid fa-house"></i> Dashboard
+    </a>
+
+    <a href="products.html">
+        <i class="fa-solid fa-box"></i> Products
+    </a>
+
+    <a href="orders.html">
+        <i class="fa-solid fa-cart-shopping"></i> Orders
+    </a>
+
+    <a href="customers.html" class="active">
+        <i class="fa-solid fa-users"></i> Customers
+    </a>
+
+    <a href="reviews.html">
+        <i class="fa-solid fa-star"></i> Reviews
+    </a>
+
+    <hr>
+
+    <a href="analytics.html">
+        <i class="fa-solid fa-chart-line"></i> Analytics
+    </a>
+
+    <a href="settings.html">
+        <i class="fa-solid fa-gear"></i> Settings
+    </a>
+
+    <a href="index.html">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </a>
+</div>
+<div class="main">
+
+    <div class="mb-4">
+        <h2 class="fw-bold">Customers</h2>
+        <p class="text-muted">Manage and track your customers</p>
+    </div>
+
+    
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div>
+                    <p class="stat-label">Total Customers</p>
+                    <p class="stat-number" id="totalCustomers">0</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+                <div>
+                    <p class="stat-label">Total Orders</p>
+                    <p class="stat-number" id="totalOrders">0</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-dollar-sign"></i>
+                </div>
+                <div>
+                    <p class="stat-label">Total Revenue</p>
+                    <p class="stat-number" id="totalRevenue">$0</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="box">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h4 class="fw-bold mb-1">All Customers</h4>
+                <p class="text-muted mb-0">Customers who placed orders</p>
+            </div>
+
+            <div class="search-box w-100">
+                <input
+                    type="text"
+                    id="searchCustomer"
+                    class="form-control"
+                    placeholder="Search by name or email..."
+                >
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table align-middle mt-4">
+
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Orders</th>
+                        <th>Total Spent</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+
+                <tbody id="customersTable"></tbody>
+
+            </table>
+        </div>
+
+        <div id="emptyState" class="empty-state" style="display:none;">
+            <i class="fa-solid fa-users"></i>
+            <h5>No Customers Found</h5>
+            <p>Customer information will appear here after checkout.</p>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal fade" id="customerModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Customer Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body" id="customerDetails"></div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    function getOrders() {
+        try {
+            return JSON.parse(localStorage.getItem("orders")) || [];
+        } catch (error) {
+            return [];
+        }
+    }
+
+    function formatMoney(amount) {
+        return "$" + Number(amount || 0).toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
+    // Build unique customers from orders
+    function getCustomers() {
+        const orders = getOrders();
+        const customers = new Map();
+
+        orders.forEach(order => {
+            const customer = order.customer || {};
+
+            const name = customer.name || "Unknown Customer";
+            const email = (customer.email || "").trim().toLowerCase();
+            const phone = (customer.phone || "").trim();
+
+            // Use email as the main unique identifier
+            const key = email || phone || name.toLowerCase();
+
+            if (!customers.has(key)) {
+                customers.set(key, {
+                    name,
+                    email: customer.email || "No email",
+                    phone: phone || "No phone",
+                    address: customer.address || "No address",
+                    orders: [],
+                    totalSpent: 0,
+                    latestDate: order.date || ""
+                });
+            }
+
+            const current = customers.get(key);
+
+            current.orders.push(order);
+            current.totalSpent += Number(order.total || 0);
+
+            if (order.date) {
+                current.latestDate = order.date;
+            }
+        });
+
+        return Array.from(customers.values());
+    }
+
+    
+    function updateStatistics(customers) {
+        const orders = getOrders();
+
+        const revenue = orders.reduce(
+            (sum, order) => sum + Number(order.total || 0),
+            0
+        );
+
+        document.getElementById("totalCustomers").textContent =
+            customers.length;
+
+        document.getElementById("totalOrders").textContent =
+            orders.length;
+
+        document.getElementById("totalRevenue").textContent =
+            formatMoney(revenue);
+    }
+
+    // Render customers
+    function displayCustomers(searchText = "") {
+        const customers = getCustomers();
+
+        updateStatistics(customers);
+
+        const tbody = document.getElementById("customersTable");
+        const emptyState = document.getElementById("emptyState");
+
+        tbody.innerHTML = "";
+
+        const filteredCustomers = customers.filter(customer =>
+            customer.name.toLowerCase().includes(searchText.toLowerCase()) ||
+            customer.email.toLowerCase().includes(searchText.toLowerCase())
+        );
+
+        if (filteredCustomers.length === 0) {
+            emptyState.style.display = "block";
+            return;
+        }
+
+        emptyState.style.display = "none";
+
+        filteredCustomers.forEach((customer, index) => {
+            const status = customer.orders.length > 0 ? "Active" : "Inactive";
+
+            const row = document.createElement("tr");
+
+            const nameCell = document.createElement("td");
+            const nameWrapper = document.createElement("div");
+            nameWrapper.className = "d-flex align-items-center gap-3";
+
+            const avatar = document.createElement("div");
+            avatar.className = "customer-icon";
+            avatar.innerHTML = '<i class="fa-solid fa-user"></i>';
+
+            const name = document.createElement("span");
+            name.className = "customer-name";
+            name.textContent = customer.name;
+
+            nameWrapper.append(avatar, name);
+            nameCell.appendChild(nameWrapper);
+
+            const emailCell = document.createElement("td");
+            emailCell.textContent = customer.email;
+
+            const phoneCell = document.createElement("td");
+            phoneCell.textContent = customer.phone;
+
+            const ordersCell = document.createElement("td");
+            ordersCell.textContent = customer.orders.length;
+
+            const spentCell = document.createElement("td");
+            spentCell.textContent = formatMoney(customer.totalSpent);
+
+            const statusCell = document.createElement("td");
+            statusCell.innerHTML = '<span class="badge text-bg-success">' +
+                status + '</span>';
+
+            const detailsCell = document.createElement("td");
+            const button = document.createElement("button");
+
+            button.className = "view-btn";
+            button.textContent = "View";
+            button.addEventListener("click", () => showCustomerDetails(customer));
+
+            detailsCell.appendChild(button);
+
+            row.append(
+                nameCell,
+                emailCell,
+                phoneCell,
+                ordersCell,
+                spentCell,
+                statusCell,
+                detailsCell
+            );
+
+            tbody.appendChild(row);
+        });
+    }
+
+    function showCustomerDetails(customer) {
+        const container = document.getElementById("customerDetails");
+
+        container.innerHTML = "";
+
+        const info = document.createElement("div");
+        info.className = "detail-card";
+
+        const heading = document.createElement("h5");
+        heading.textContent = customer.name;
+
+        const email = document.createElement("p");
+        email.textContent = "Email: " + customer.email;
+
+        const phone = document.createElement("p");
+        phone.textContent = "Phone: " + customer.phone;
+
+        const address = document.createElement("p");
+        address.textContent = "Address: " + customer.address;
+
+        const total = document.createElement("p");
+        total.textContent = "Total Spent: " + formatMoney(customer.totalSpent);
+
+        info.append(heading, email, phone, address, total);
+        container.appendChild(info);
+
+        const title = document.createElement("h6");
+        title.className = "fw-bold mt-4 mb-3";
+        title.textContent = "Order History";
+        container.appendChild(title);
+
+        customer.orders.forEach(order => {
+            const card = document.createElement("div");
+            card.className = "detail-card";
+
+            const orderTitle = document.createElement("strong");
+            orderTitle.textContent = "Order #" + order.id;
+
+            const date = document.createElement("p");
+            date.textContent = "Date: " + (order.date || "Not available");
+
+            const payment = document.createElement("p");
+            payment.textContent = "Payment: " + (order.payment || "Not available");
+
+            const status = document.createElement("p");
+            status.textContent = "Status: " + (order.status || "Pending");
+
+            const amount = document.createElement("p");
+            amount.className = "fw-bold mb-2";
+            amount.textContent = "Total: " + formatMoney(order.total);
+
+            card.append(orderTitle, date, payment, status, amount);
+
+            (order.items || []).forEach(item => {
+                const product = document.createElement("p");
+                product.className = "mb-1 text-muted";
+                product.textContent =
+                    (item.name || "Product") +
+                    " × " + Number(item.quantity || 1);
+                card.appendChild(product);
+            });
+
+            container.appendChild(card);
+        });
+
+        const modal = bootstrap.Modal.getOrCreateInstance(
+            document.getElementById("customerModal")
+        );
+
+        modal.show();
+    }
+
+    
+    document.getElementById("searchCustomer").addEventListener("input", function() {
+        displayCustomers(this.value);
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        displayCustomers();
+    });
+
+    window.addEventListener("storage", function(event) {
+        if (event.key === "orders") {
+            displayCustomers(
+                document.getElementById("searchCustomer").value
+            );
+        }
+    });
+</script>
+
+</body>
+</html>
